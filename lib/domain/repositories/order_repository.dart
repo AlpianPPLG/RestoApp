@@ -1,0 +1,29 @@
+import 'package:restoapp/domain/entities/order.dart';
+import 'package:restoapp/domain/entities/enums.dart';
+
+/// Order repository interface.
+abstract class OrderRepository {
+  /// Get all orders, optionally filtered by status.
+  Future<List<Order>> getOrders({OrderStatus? status});
+
+  /// Get a single order by ID (with items).
+  Future<Order> getOrderById(int id);
+
+  /// Create a new order with items.
+  Future<Order> createOrder(Order order);
+
+  /// Update order status.
+  Future<void> updateOrderStatus(int id, OrderStatus status);
+
+  /// Update individual order item status.
+  Future<void> updateOrderItemStatus(int itemId, OrderItemStatus status);
+
+  /// Cancel an order.
+  Future<void> cancelOrder(int id);
+
+  /// Get orders for kitchen (pending/processing).
+  Future<List<Order>> getKitchenOrders();
+
+  /// Get orders ready for payment (delivered).
+  Future<List<Order>> getPendingPaymentOrders();
+}
