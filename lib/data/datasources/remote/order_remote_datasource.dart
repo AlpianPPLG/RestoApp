@@ -42,4 +42,38 @@ class OrderRemoteDataSource {
       data: {'status': status},
     );
   }
+
+  Future<void> processPayment({
+    required int orderId,
+    required String paymentMethod,
+    required double amountPaid,
+    String? notes,
+  }) async {
+    await _dio.post(
+      ApiEndpoints.processPayment(orderId),
+      data: {
+        'payment_method': paymentMethod,
+        'amount_paid': amountPaid,
+        'notes': notes,
+      },
+    );
+  }
+
+  Future<List<dynamic>> getTransactionHistory({
+    String? startDate,
+    String? endDate,
+  }) async {
+    final queryParams = <String, dynamic>{};
+    if (startDate != null) {
+      queryParams['start_date'] = startDate;
+    }
+    if (endDate != null) {
+      queryParams['end_date'] = endDate;
+    }
+    final response = await _dio.get(
+      ApiEndpoints.transactionHistory,
+      queryParameters: queryParams,
+    );
+    return response.data['data'] as List<dynamic>;
+  }
 }

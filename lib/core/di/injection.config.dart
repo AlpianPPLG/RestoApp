@@ -18,6 +18,8 @@ import 'package:logger/logger.dart' as _i974;
 import 'package:restoapp/core/di/register_module.dart' as _i1003;
 import 'package:restoapp/core/network/api_client.dart' as _i305;
 import 'package:restoapp/core/network/network_info.dart' as _i637;
+import 'package:restoapp/core/services/pdf_receipt_service.dart' as _i763;
+import 'package:restoapp/core/services/print_share_service.dart' as _i944;
 import 'package:restoapp/data/datasources/remote/auth_remote_datasource.dart'
     as _i128;
 import 'package:restoapp/data/datasources/remote/menu_remote_datasource.dart'
@@ -50,9 +52,16 @@ import 'package:restoapp/domain/usecases/auth/logout_usecase.dart' as _i984;
 import 'package:restoapp/domain/usecases/auth/register_usecase.dart' as _i551;
 import 'package:restoapp/presentation/blocs/admin/admin_bloc.dart' as _i881;
 import 'package:restoapp/presentation/blocs/auth/auth_bloc.dart' as _i981;
+import 'package:restoapp/presentation/blocs/cashier/cashier_bloc.dart' as _i671;
+import 'package:restoapp/presentation/blocs/kitchen/kitchen_bloc.dart' as _i106;
 import 'package:restoapp/presentation/blocs/menu/menu_bloc.dart' as _i300;
 import 'package:restoapp/presentation/blocs/table/table_bloc.dart' as _i782;
 import 'package:restoapp/presentation/blocs/user/user_bloc.dart' as _i750;
+import 'package:restoapp/presentation/blocs/waiter/cart_bloc.dart' as _i194;
+import 'package:restoapp/presentation/blocs/waiter/new_order_bloc.dart'
+    as _i810;
+import 'package:restoapp/presentation/blocs/waiter/waiter_table_bloc.dart'
+    as _i458;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -62,6 +71,9 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final registerModule = _$RegisterModule();
+    gh.factory<_i763.PdfReceiptService>(() => _i763.PdfReceiptService());
+    gh.factory<_i944.PrintShareService>(() => _i944.PrintShareService());
+    gh.factory<_i194.CartBloc>(() => _i194.CartBloc());
     gh.singleton<_i974.Logger>(() => registerModule.logger);
     gh.singleton<_i558.FlutterSecureStorage>(
       () => registerModule.secureStorage,
@@ -113,6 +125,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i759.MenuRepository>(
       () => _i783.MenuRepositoryImpl(gh<_i642.MenuRemoteDataSource>()),
     );
+    gh.factory<_i810.NewOrderBloc>(
+      () => _i810.NewOrderBloc(menuRepository: gh<_i759.MenuRepository>()),
+    );
     gh.factory<_i542.UserRepository>(
       () => _i120.UserRepositoryImpl(gh<_i620.UserRemoteDataSource>()),
     );
@@ -139,6 +154,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i740.PaymentRepository>(
       () => _i384.PaymentRepositoryImpl(gh<_i919.PaymentRemoteDataSource>()),
     );
+    gh.factory<_i458.WaiterTableBloc>(
+      () => _i458.WaiterTableBloc(tableRepository: gh<_i404.TableRepository>()),
+    );
     gh.factory<_i881.AdminBloc>(
       () => _i881.AdminBloc(
         gh<_i759.MenuRepository>(),
@@ -148,6 +166,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i782.TableBloc>(
       () => _i782.TableBloc(gh<_i404.TableRepository>()),
+    );
+    gh.factory<_i671.CashierBloc>(
+      () => _i671.CashierBloc(orderRepository: gh<_i912.OrderRepository>()),
+    );
+    gh.factory<_i106.KitchenBloc>(
+      () => _i106.KitchenBloc(orderRepository: gh<_i912.OrderRepository>()),
     );
     return this;
   }

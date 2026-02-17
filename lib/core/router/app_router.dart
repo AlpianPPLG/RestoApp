@@ -9,6 +9,10 @@ import 'package:restoapp/presentation/pages/admin/admin_dashboard_page.dart';
 import 'package:restoapp/presentation/pages/admin/menu_management_page.dart';
 import 'package:restoapp/presentation/pages/admin/table_management_page.dart';
 import 'package:restoapp/presentation/pages/admin/user_management_page.dart';
+import 'package:restoapp/presentation/pages/waiter/waiter_dashboard_page.dart';
+import 'package:restoapp/presentation/pages/waiter/new_order_page.dart';
+import 'package:restoapp/presentation/pages/kitchen/kitchen_dashboard_page.dart';
+import 'package:restoapp/presentation/pages/cashier/cashier_dashboard_page.dart';
 
 /// Application router configuration using GoRouter.
 class AppRouter {
@@ -76,32 +80,26 @@ class AppRouter {
       GoRoute(
         path: RoutePaths.waiterDashboard,
         name: RouteNames.waiterDashboard,
-        builder: (context, state) =>
-            const _PlaceholderPage(title: 'Waiter Dashboard'),
+        builder: (context, state) => const WaiterDashboardPage(),
       ),
       GoRoute(
         path: RoutePaths.newOrder,
         name: RouteNames.newOrder,
-        builder: (context, state) {
-          final tableId = state.pathParameters['tableId']!;
-          return _PlaceholderPage(title: 'New Order - Table $tableId');
-        },
+        builder: (context, state) => const NewOrderPage(),
       ),
 
       // Kitchen routes
       GoRoute(
         path: RoutePaths.kitchenDashboard,
         name: RouteNames.kitchenDashboard,
-        builder: (context, state) =>
-            const _PlaceholderPage(title: 'Kitchen Display'),
+        builder: (context, state) => const KitchenDashboardPage(),
       ),
 
       // Cashier routes
       GoRoute(
         path: RoutePaths.cashierDashboard,
         name: RouteNames.cashierDashboard,
-        builder: (context, state) =>
-            const _PlaceholderPage(title: 'Cashier POS'),
+        builder: (context, state) => const CashierDashboardPage(),
       ),
 
       // Receipt

@@ -96,4 +96,56 @@ class OrderRepositoryImpl implements OrderRepository {
   Future<List<Order>> getPendingPaymentOrders() async {
     return getOrders(status: OrderStatus.delivered);
   }
+
+  @override
+  Future<List<Order>> getOrdersByStatus(OrderStatus status) async {
+    return getOrders(status: status);
+  }
+
+  @override
+  Future<Order> getOrder(int orderId) async {
+    return getOrderById(orderId);
+  }
+
+  @override
+  Future<void> processPayment({
+    required int orderId,
+    required PaymentMethod paymentMethod,
+    required double amountPaid,
+    String? notes,
+  }) async {
+    try {
+      await _remoteDataSource.processPayment(
+        orderId: orderId,
+        paymentMethod: paymentMethod.name,
+        amountPaid: amountPaid,
+        notes: notes,
+      );
+
+      // Update order status to completed after successful payment
+      await updateOrderStatus(orderId, OrderStatus.completed);
+    } catch (e) {
+      if (e is AppException) rethrow;
+      throw ServerException(message: e.toString());
+    }
+  }
+
+  @override
+  Future<List<Order>> getTransactionHistory({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    try {
+      final data = await _remoteDataSource.getTransactionHistory(
+        startDate: startDate?.toIso8601String(),
+        endDate: endDate?.toIso8601String(),
+      );
+      return data
+          .map((e) => Order.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      if (e is AppException) rethrow;
+      throw ServerException(message: e.toString());
+    }
+  }
 }

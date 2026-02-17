@@ -47,6 +47,8 @@ dependencies:
   # PDF & Printing
   pdf: ^3.11.2
   printing: ^5.14.2
+  path_provider: ^2.1.5
+  share_plus: ^10.0.3
 
   # Utilities
   intl: ^0.20.2

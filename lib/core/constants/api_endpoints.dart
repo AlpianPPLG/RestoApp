@@ -30,6 +30,10 @@ class ApiEndpoints {
 
   // Payments
   static const String payments = '/payments';
+  static String processPayment(int orderId) => '/orders/$orderId/payment';
+
+  // Transactions
+  static const String transactionHistory = '/transactions/history';
 
   // Users
   static const String users = '/users';

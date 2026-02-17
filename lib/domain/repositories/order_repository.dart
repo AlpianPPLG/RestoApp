@@ -26,4 +26,24 @@ abstract class OrderRepository {
 
   /// Get orders ready for payment (delivered).
   Future<List<Order>> getPendingPaymentOrders();
+
+  /// Get orders by specific status.
+  Future<List<Order>> getOrdersByStatus(OrderStatus status);
+
+  /// Get single order with full details.
+  Future<Order> getOrder(int orderId);
+
+  /// Process payment for an order.
+  Future<void> processPayment({
+    required int orderId,
+    required PaymentMethod paymentMethod,
+    required double amountPaid,
+    String? notes,
+  });
+
+  /// Get transaction history within date range.
+  Future<List<Order>> getTransactionHistory({
+    DateTime? startDate,
+    DateTime? endDate,
+  });
 }
